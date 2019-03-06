@@ -71,7 +71,7 @@ fi
 
 echo "Installing packages..."
 
-pacman -Suy --noconfirm git wget hostapd dnsmasq create_ap apache mysql php php-apache php-mcrypt phpmyadmin
+pacman -Suy --noconfirm git wget hostapd dnsmasq create_ap apache mysql php php-apache phpmyadmin
 
 # Check if pacman ran successfully
 if [ $? -eq 0 ]
