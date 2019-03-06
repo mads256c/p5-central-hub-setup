@@ -196,7 +196,8 @@ else
   exit 1
 fi
 
-systemctl start mysqld
+systemctl stop httpd
+systemctl restart mysqld
 
 echo "Executing mysql_secure_installation..."
 
