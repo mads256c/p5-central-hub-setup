@@ -210,21 +210,50 @@ else
   exit 1
 fi
 
-echo "Cleaning existing files"
+echo "Downloading update-central-hub"
 
-rm -Rf /srv/http/*
+wget https://raw.githubusercontent.com/mads256c/p5-central-hub-setup/master/update-central-hub.sh
 
-echo "Cloning webcontent"
+# Check if wget downloaded config
+if [ $? -eq 0 ]
+then
+  echo -e "[  ${GREEN}OK${NC}  ] update-central-hub downloaded successfully"
+else
+  echo -e "[ ${RED}FAIL${NC} ] update-central-hub download failed" >&2
+  exit 1
+fi
 
-git clone https://github.com/c3lphie/p5-central-hub.git /srv/http
+echo "Copying update-central-hub..."
+
+cp update-central-hub.sh /usr/bin/update-central-hub
 
 if [ $? -eq 0 ]
 then
-  echo -e "[  ${GREEN}OK${NC}  ] Webcontent clone succeeded"
+  echo -e "[  ${GREEN}OK${NC}  ] update-central-hub copy succeeded"
 else
-  echo -e "[ ${RED}FAIL${NC} ] Webcontent clone failed" >&2
+  echo -e "[ ${RED}FAIL${NC} ] update-central-hub copy failed" >&2
   exit 1
 fi
+
+echo "Setting permissions..."
+
+chmod +x /usr/bin/update-central-hub
+
+if [ $? -eq 0 ]
+then
+  echo -e "[  ${GREEN}OK${NC}  ] Permissions change succeeded"
+else
+  echo -e "[ ${RED}FAIL${NC} ] Permissions change failed" >&2
+  exit 1
+fi
+
+update-central-hub
+
+if [ $? -eq 1 ]
+then
+  exit 1
+fi
+
 
 echo "Enabling services to start on startup..."
 
