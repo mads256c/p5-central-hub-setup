@@ -25,7 +25,7 @@ if [ $? -eq 0 ]
 then
   echo -e "[ ${GREEN}OK${NC} ] pacman keys initialized successfully"
 else
-  echo -e "[ ${RED}FAIL${NC} ] pacman keys did not initialize sucessfully" >&2
+  echo -e "[ ${RED}FAIL${NC} ] pacman keys did not initialize successfully" >&2
   exit 1
 fi
 
@@ -38,7 +38,7 @@ if [ $? -eq 0 ]
 then
   echo -e "[ ${GREEN}OK${NC} ] pacman keys populated successfully"
 else
-  echo -e "[ ${RED}FAIL${NC} ] pacman keys did not populate sucessfully" >&2
+  echo -e "[ ${RED}FAIL${NC} ] pacman keys did not populate successfully" >&2
   exit 1
 fi
 
@@ -69,8 +69,19 @@ else
   exit 1
 fi
 
+echo "Downloading hotspot config..."
+
 wget https://raw.githubusercontent.com/mads256c/p5-central-hub-setup/master/create_ap.conf
 
-cp create_ap.conf /etc/create_ap.conf
+# Check if pacman ran successfully
+if [ $? -eq 0 ]
+then
+  echo -e "[ ${GREEN}OK${NC} ] Hotspot config downloaded successfully"
+else
+  echo -e "[ ${RED}FAIL${NC} ] Hotspot config download failed" >&2
+  exit 1
+fi
 
-systemctl enable create_ap
+#cp create_ap.conf /etc/create_ap.conf
+
+#systemctl enable create_ap
