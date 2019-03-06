@@ -71,7 +71,7 @@ fi
 
 echo "Installing packages..."
 
-pacman -Suy --noconfirm git wget hostapd dnsmasq create_ap apache mysql php php-apache
+pacman -Suy --noconfirm git wget hostapd dnsmasq create_ap apache mysql php php-apache php-mcrypt phpmyadmin
 
 # Check if pacman ran successfully
 if [ $? -eq 0 ]
@@ -107,7 +107,84 @@ else
   exit 1
 fi
 
-echo "Installing MySQLl..."
+echo "Downloading apache config..."
+
+wget https://raw.githubusercontent.com/mads256c/p5-central-hub-setup/master/httpd.conf 
+
+# Check if wget downloaded config
+if [ $? -eq 0 ]
+then
+  echo -e "[  ${GREEN}OK${NC}  ] Apache config downloaded successfully"
+else
+  echo -e "[ ${RED}FAIL${NC} ] Apache config download failed" >&2
+  exit 1
+fi
+
+
+echo "Copying apache config..."
+
+cp httpd.conf /etc/httpd/conf/httpd.conf
+
+if [ $? -eq 0 ]
+then
+  echo -e "[  ${GREEN}OK${NC}  ] Apache config copy succeeded"
+else
+  echo -e "[ ${RED}FAIL${NC} ] Apache config copy failed" >&2
+  exit 1
+fi
+
+echo "Downloading phpmyadmin config..."
+
+wget https://raw.githubusercontent.com/mads256c/p5-central-hub-setup/master/phpmyadmin.conf 
+
+# Check if wget downloaded config
+if [ $? -eq 0 ]
+then
+  echo -e "[  ${GREEN}OK${NC}  ] phpmyadmin config downloaded successfully"
+else
+  echo -e "[ ${RED}FAIL${NC} ] phpmyadminconfig download failed" >&2
+  exit 1
+fi
+
+
+echo "Copying phpmyadmin config..."
+
+cp phpmyadmin.conf /etc/httpd/conf/extra/phpmyadmin.conf
+
+if [ $? -eq 0 ]
+then
+  echo -e "[  ${GREEN}OK${NC}  ] phpmyadmin config copy succeeded"
+else
+  echo -e "[ ${RED}FAIL${NC} ] phpmyadmin config copy failed" >&2
+  exit 1
+fi
+
+echo "Downloading php config..."
+
+wget https://raw.githubusercontent.com/mads256c/p5-central-hub-setup/master/php.ini
+
+# Check if wget downloaded config
+if [ $? -eq 0 ]
+then
+  echo -e "[  ${GREEN}OK${NC}  ] php config downloaded successfully"
+else
+  echo -e "[ ${RED}FAIL${NC} ] php config download failed" >&2
+  exit 1
+fi
+
+echo "Copying php config..."
+
+cp php.ini /etc/php/php.ini
+
+if [ $? -eq 0 ]
+then
+  echo -e "[  ${GREEN}OK${NC}  ] phpmyadmin config copy succeeded"
+else
+  echo -e "[ ${RED}FAIL${NC} ] phpmyadmin config copy failed" >&2
+  exit 1
+fi
+
+echo "Installing MySQL..."
 
 mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 
@@ -131,5 +208,26 @@ else
   exit 1
 fi
 
+echo "Cleaning existing files"
 
-#systemctl enable create_ap
+rm -Rf /srv/http/*
+
+echo "Cloning webcontent"
+
+git clone https://github.com/c3lphie/p5-central-hub.git /srv/http
+
+if [ $? -eq 0 ]
+then
+  echo -e "[  ${GREEN}OK${NC}  ] Webcontent clone succeeded"
+else
+  echo -e "[ ${RED}FAIL${NC} ] Webcontent clone failed" >&2
+  exit 1
+fi
+
+echo "Enabling services to start on startup..."
+
+systemctl enable create_ap
+systemctl enable mysqld
+systemctl enable httpd
+
+echo -e "[  ${GREEN}OK${NC}  ] Install completed successfully. Reboot the machine to apply changes."
