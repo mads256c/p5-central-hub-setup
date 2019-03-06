@@ -1,11 +1,20 @@
 #!/bin/bash
+
+# Color constants
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+
+# This script is responsible for the first stage in setting the system up to use and install p5-central-hub
+
 echo "Checking if user is root..."
 if [ "$EUID" -ne 0 ]
-  then echo "[ FAIL ] Please run as root"
+  then echo -e "[ ${RED}FAIL${NC} ] Please run script as root"
   exit
 fi
 
-echo "[ OK ] User is root"
+echo -e "[ ${GREEN}OK${NC} ] User is root"
 
 echo "Initializing pacman keys..."
 
@@ -14,27 +23,54 @@ pacman-key --init
 # Check if pacman-key ran successfully
 if [ $? -eq 0 ]
 then
-  echo "[ OK ] pacman keys initialized sucessfully"
+  echo -e "[ ${GREEN}OK${NC} ] pacman keys initialized successfully"
 else
-  echo "[ FAIL ] pacman keys did not initialize sucessfully" >&2
+  echo -e "[ ${RED}FAIL${NC} ] pacman keys did not initialize sucessfully" >&2
   exit 1
 fi
 
+echo "Populating pacman keys..."
+
 pacman-key --populate archlinuxarm
 
-echo "[ OK ] pacman keys initialized"
+# Check if pacman-key ran successfully
+if [ $? -eq 0 ]
+then
+  echo -e "[ ${GREEN}OK${NC} ] pacman keys populated successfully"
+else
+  echo -e "[ ${RED}FAIL${NC} ] pacman keys did not populate sucessfully" >&2
+  exit 1
+fi
 
 #Update system
-echo "Updating System..."
+echo "Updating system..."
 
 pacman -Suy --noconfirm
 
-echo "Installing packages"
+# Check if pacman ran successfully
+if [ $? -eq 0 ]
+then
+  echo -e "[ ${GREEN}OK${NC} ] Updated system successfully"
+else
+  echo -e "[ ${RED}FAIL${NC} ] System update failed" >&2
+  exit 1
+fi
+
+echo "Installing packages..."
 
 pacman -Suy --noconfirm git wget hostapd dnsmasq create_ap apache mysql php
+
+# Check if pacman ran successfully
+if [ $? -eq 0 ]
+then
+  echo -e "[ ${GREEN}OK${NC} ] Packages installed successfully"
+else
+  echo -e "[ ${RED}FAIL${NC} ] Package install failed" >&2
+  exit 1
+fi
 
 wget https://raw.githubusercontent.com/mads256c/p5-central-hub-setup/master/create_ap.conf
 
 cp create_ap.conf /etc/create_ap.conf
 
-systemctl 
+systemctl enable create_ap
