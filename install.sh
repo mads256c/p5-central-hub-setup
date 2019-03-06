@@ -184,6 +184,9 @@ else
   exit 1
 fi
 
+systemctl stop httpd
+systemctl stop mysqld
+
 echo "Installing MySQL..."
 
 mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
@@ -196,7 +199,6 @@ else
   exit 1
 fi
 
-systemctl stop httpd
 systemctl restart mysqld
 
 echo "Executing mysql_secure_installation..."
