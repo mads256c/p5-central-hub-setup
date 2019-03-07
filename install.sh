@@ -17,7 +17,7 @@ fi
 echo -e "[  ${GREEN}OK${NC}  ] User is root"
 
 echo "Checking internet connection..."
-¨
+
 ping -q -w 1 -c 1 google.com > /dev/null
 
 # Check internet
