@@ -7,7 +7,7 @@ NC='\033[0m' # No Color
 
 echo "Cleaning existing files"
 
-rm -Rf /srv/http/*
+rm -Rf /srv/http
 
 echo "Cloning webcontent"
 
