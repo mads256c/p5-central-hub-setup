@@ -84,7 +84,7 @@ fi
 
 echo "Downloading hotspot config..."
 
-wget https://raw.githubusercontent.com/mads256c/p5-central-hub-setup/master/create_ap.conf
+wget https://raw.githubusercontent.com/mads256c/p5-central-hub-setup/master/create_ap.conf -O create_ap.conf
 
 # Check if wget downloaded config
 if [ $? -eq 0 ]
@@ -109,7 +109,7 @@ fi
 
 echo "Downloading apache config..."
 
-wget https://raw.githubusercontent.com/mads256c/p5-central-hub-setup/master/httpd.conf 
+wget https://raw.githubusercontent.com/mads256c/p5-central-hub-setup/master/httpd.conf -O httpd.conf
 
 # Check if wget downloaded config
 if [ $? -eq 0 ]
@@ -135,7 +135,7 @@ fi
 
 echo "Downloading phpmyadmin config..."
 
-wget https://raw.githubusercontent.com/mads256c/p5-central-hub-setup/master/phpmyadmin.conf 
+wget https://raw.githubusercontent.com/mads256c/p5-central-hub-setup/master/phpmyadmin.conf -O phpmyadmin.conf
 
 # Check if wget downloaded config
 if [ $? -eq 0 ]
@@ -161,7 +161,7 @@ fi
 
 echo "Downloading php config..."
 
-wget https://raw.githubusercontent.com/mads256c/p5-central-hub-setup/master/php.ini
+wget https://raw.githubusercontent.com/mads256c/p5-central-hub-setup/master/php.ini -O php.ini
 
 # Check if wget downloaded config
 if [ $? -eq 0 ]
@@ -215,7 +215,7 @@ fi
 
 echo "Downloading update-central-hub"
 
-wget https://raw.githubusercontent.com/mads256c/p5-central-hub-setup/master/update-central-hub.sh
+wget https://raw.githubusercontent.com/mads256c/p5-central-hub-setup/master/update-central-hub.sh -O update-central-hub.sh
 
 # Check if wget downloaded config
 if [ $? -eq 0 ]
