@@ -5,11 +5,11 @@ GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 
 
-echo "Cleaning existing files"
+echo "Cleaning existing files..."
 
 rm -Rf /srv/http
 
-echo "Cloning webcontent"
+echo "Cloning webcontent..."
 
 git clone https://github.com/c3lphie/p5-central-hub.git /srv/http
 
